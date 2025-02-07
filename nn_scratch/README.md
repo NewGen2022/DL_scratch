@@ -137,3 +137,93 @@ z = x * y + 1.0  # z = x * y + 1
 draw_dot(z)
 ```
 
+## Multi-Layer Perceptron (MLP) Neural Network
+
+This repository contains a basic implementation of a **Multi-Layer Perceptron (MLP)** neural network with forward and backward passes, training using **gradient descent**. The network is designed to handle simple binary classification tasks. Below is an explanation of the code and its components.
+
+### Components
+
+#### 1. **Neuron Class**
+The `Neuron` class represents a single neuron in the neural network.
+
+- **Initialization (`__init__`)**: 
+  - The neuron has a set of **weights** (`w`) and a **bias** (`b`), both initialized with random values between -1 and 1.
+  - `nin` is the number of inputs to the neuron.
+
+- **`__call__` method**:
+  - Takes an input `x` (a list of values), computes the weighted sum of the inputs (`w * x + b`), and applies the **tanh** activation function to the result.
+  - Returns the activated output.
+
+- **`parameters` method**:
+  - Returns a list of the neuron’s weights and bias, which are the **trainable parameters** that will be updated during training.
+
+#### 2. **Layer Class**
+The `Layer` class represents a single layer of neurons in the neural network.
+
+- **Initialization (`__init__`)**:
+  - Takes the number of **inputs** (`nin`) and the number of **neurons** (`nout`) in the layer.
+  - Creates a list of `nout` neurons, each having `nin` inputs.
+
+- **`__call__` method**:
+  - Passes the input `x` through each neuron in the layer and returns their outputs. If there's only one neuron, it returns that output; otherwise, it returns all the neuron outputs as a list.
+
+- **`parameters` method**:
+  - Returns the parameters (weights and bias) of all neurons in the layer.
+
+#### 3. **MLP (Multi-Layer Perceptron) Class**
+The `MLP` class represents the entire neural network, consisting of multiple layers.
+
+- **Initialization (`__init__`)**:
+  - Takes the number of **input features** (`nin`) and a list of the number of neurons in each layer (`nouts`).
+  - Creates a sequence of layers based on the sizes provided.
+
+- **`__call__` method**:
+  - Passes the input `x` through all the layers in the network, one by one.
+
+- **`parameters` method**:
+  - Returns all the parameters (weights and biases) of the network by collecting them from each layer.
+
+### 4. **Training the Network**
+- **Inputs (`xs`)**: A set of example inputs for the network to learn from. Each input is a list of 3 values (features).
+- **Targets (`ys`)**: The desired outputs (ground truth) for each corresponding input. These are the values the network is trying to predict.
+
+#### Training Loop
+The network is trained for 20 iterations, with the following steps:
+
+1. **Forward pass**:
+   - For each input, the network computes a predicted output (`y_pred`) using the `__call__` method.
+
+2. **Loss Calculation**:
+   - The loss is calculated as the sum of squared differences between the predicted outputs (`y_pred`) and the target outputs (`ys`).
+
+3. **Backward pass**:
+   - Gradients are computed for each parameter using `loss.backward()`. This step uses **backpropagation** to compute how much each parameter contributed to the loss.
+
+4. **Parameter Update**:
+   - The parameters (weights and biases) are updated by subtracting a fraction of their gradient (scaled by a learning rate of `0.05`).
+
+5. The **loss** is printed after each iteration to track the model's performance.
+
+### Final Prediction
+After training, the model predicts the outputs for all the input examples (`xs`). The predictions (`y_pred`) will be printed out at the end.
+
+### Key Concepts
+
+- **Forward Pass**: The process of feeding inputs through the network to obtain the output.
+- **Loss Function**: The loss function measures how far off the predicted outputs are from the true outputs. In this case, it is the **mean squared error (MSE)**.
+- **Backpropagation**: The process of computing gradients of the loss with respect to the parameters (weights and biases), which are used to adjust the parameters.
+- **Gradient Descent**: The method of updating parameters by moving them in the direction of the negative gradient of the loss, scaled by a learning rate.
+
+### Example Flow
+
+Given the input data `xs` and the desired target values `ys`, after training, the neural network will make predictions that should be closer to the target values. For each input in `xs`, the predictions (`y_pred`) will be printed, showing how the network learned to approximate the targets.
+
+### Example Output
+
+The training loop will print the **iteration number** and the **loss** at that iteration. After 20 iterations, the loss should decrease, indicating that the model is learning.
+
+After training, the predictions for the inputs will be displayed in the form of `y_pred`.
+
+### Conclusion
+
+This simple MLP implementation provides the foundation for understanding how neural networks are built, trained, and evaluated. It can be extended to more complex tasks, deeper networks, and various types of activation functions and loss functions.
