@@ -84,3 +84,56 @@ z = x * y + 1.0  # z = x * y + 1
 z.backward()  # Calculates gradients for x, y, and z
 ```
 
+
+## Visualization of Computation Graph with `graphviz`
+
+This project uses the `graphviz` package to visualize the computation graph of `Value` objects, showing how values are computed and how gradients are propagated during backpropagation.
+
+### Purpose
+
+The goal is to generate a graphical representation of operations and dependencies between `Value` objects. This visualization helps understand the flow of data and gradients through the network.
+
+### How It Works
+
+The code generates a `graphviz` Digraph based on the computation graph of `Value` objects. The graph shows:
+
+- The `data` and `grad` of each `Value` object.
+- The operations (such as addition, multiplication) that generated each `Value`.
+- The relationships (dependencies) between different `Value` objects.
+
+### Functions
+
+#### `trace(root)`
+- Recursively builds a set of nodes and edges in the computation graph starting from the given root node.
+- The function collects all nodes and edges of the graph by traversing the previous nodes (`_prev`).
+
+#### `draw_dot(root)`
+- Uses `graphviz` to create a graphical representation of the computation graph.
+- **Attributes**:
+  - **`rankdir='LR'`**: Specifies that the graph should be drawn from left to right.
+  - **Nodes**: Each `Value` object is represented as a rectangular node, displaying its label, `data`, and `grad`.
+  - **Edges**: Connects the nodes to visualize the flow of data and operations.
+  - **Operations**: If a `Value` is the result of an operation, it creates an operation node and connects it to the corresponding value.
+
+### How to Use
+
+1. **Create `Value` Objects**: 
+   Define `Value` objects and perform operations like addition or multiplication on them.
+
+2. **Call `draw_dot`**: 
+   Use the `draw_dot` function to generate the computation graph starting from the root `Value`.
+
+### Example
+
+```python
+# Assuming the Value class is already defined
+
+# Create some values and perform operations
+x = Value(2.0, label="x")
+y = Value(3.0, label="y")
+z = x * y + 1.0  # z = x * y + 1
+
+# Draw the computation graph
+draw_dot(z)
+```
+
